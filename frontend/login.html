@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitBuddy — Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body style="display: flex; align-items: center; justify-content: center; height: 100vh;">
+
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+
+    <div class="modal-content" style="width: 100%; max-width: 400px; display: block; position: relative; z-index: 10;">
+        <div class="modal-header">
+            <i class="fa-solid fa-user-lock"></i>
+            <h3 id="auth-title">เข้าสู่ระบบ</h3>
+        </div>
+        <div class="modal-body">
+            <input type="text" id="auth-username" placeholder="ชื่อผู้ใช้งาน (Username)" autocomplete="off">
+            <input type="password" id="auth-password" placeholder="รหัสผ่าน (Password)" style="margin-top: 12px;">
+            <div id="auth-error" style="color: #ff4d4f; font-size: 13px; margin-top: 12px; display: none; text-align: center;"></div>
+        </div>
+        <div class="modal-footer" style="flex-direction: column; gap: 10px;">
+            <button id="submit-auth-btn" class="btn-modal primary" style="width: 100%;">ล็อกอิน</button>
+            <button id="toggle-auth-btn" class="btn-modal secondary" style="width: 100%;">ยังไม่มีบัญชี? สมัครสมาชิก</button>
+            <hr style="width: 100%; border: 0; border-top: 1px solid var(--border); margin: 10px 0;">
+            <a href="index.html" style="color: var(--accent); text-decoration: none; font-size: 13px;">ใช้งานแบบผู้เยี่ยมชม (Guest) →</a>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+
+        const authTitle = document.getElementById('auth-title');
+        const authUsernameInput = document.getElementById('auth-username');
+        const authPasswordInput = document.getElementById('auth-password');
+        const toggleAuthBtn = document.getElementById('toggle-auth-btn');
+        const submitAuthBtn = document.getElementById('submit-auth-btn');
+        const authError = document.getElementById('auth-error');
+
+        let isLoginMode = true;
+
+        toggleAuthBtn.addEventListener('click', () => {
+            isLoginMode = !isLoginMode;
+            authTitle.textContent = isLoginMode ? 'เข้าสู่ระบบ' : 'สมัครสมาชิก';
+            submitAuthBtn.textContent = isLoginMode ? 'ล็อกอิน' : 'สมัครสมาชิก';
+            toggleAuthBtn.textContent = isLoginMode ? 'ยังไม่มีบัญชี? สมัครสมาชิก' : 'มีบัญชีแล้ว? ล็อกอิน';
+        });
+
+        submitAuthBtn.addEventListener('click', async () => {
+            const username = authUsernameInput.value.trim();
+            const password = authPasswordInput.value.trim();
+            if(!username || !password) return showError("กรุณากรอกข้อมูลให้ครบ");
+
+            const endpoint = isLoginMode ? '/login' : '/register';
+            try {
+                const res = await fetch(`${API_BASE_URL}${endpoint}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await res.json();
+                if(data.status === 'success') {
+                    if(isLoginMode) {
+                        localStorage.setItem('fitbuddy_token', data.access_token);
+                        localStorage.setItem('fitbuddy_username', data.username);
+                        localStorage.removeItem('fitbuddy_current_session');
+                        window.location.href = 'index.html'; // ล็อกอินสำเร็จ ส่งไปหน้าแชท
+                    } else {
+                        showError("สมัครสำเร็จ! กรุณาล็อกอิน", "#22c55e");
+                        setTimeout(() => toggleAuthBtn.click(), 1000);
+                    }
+                } else { showError(data.message); }
+            } catch (e) { showError("เซิร์ฟเวอร์ขัดข้อง"); }
+        });
+
+        function showError(msg, color="#ff4d4f") {
+            authError.textContent = msg; authError.style.color = color; authError.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

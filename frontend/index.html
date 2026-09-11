@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitBuddy — AI Personal Trainer</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Ambient background orbs -->
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+
+    <div class="app-shell">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-dumbbell"></i>
+                </div>
+                <span class="logo-text">FitBuddy</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <button id="new-chat-btn" class="nav-item new-chat-btn">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>แชทใหม่</span>
+                </button>
+
+                <div class="nav-label" style="margin-top: 15px;">ประวัติแชทของคุณ</div>
+                
+                <div id="chat-history-list" class="history-list">
+                    </div>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="trainer-card">
+                    <div class="trainer-avatar">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div class="trainer-info">
+                        <div class="trainer-name">AI Trainer</div>
+                        <div class="trainer-status">
+                            <span class="pulse-dot"></span> พร้อมช่วยเหลือ
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+
+            <!-- TOP BAR -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="menu-toggle" id="menu-toggle">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div class="page-title">
+                        <span class="page-tag">AI TRAINER</span>
+                        <h1>แชทกับ FitBuddy</h1>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <div class="topbar-right">
+                    <span id="display-username" style="font-size: 12px; color: var(--text-muted); margin-right: 10px;"></span>
+                    
+                    <div class="chip">
+                        <span class="pulse-dot"></span>
+                        <span id="status-text">Online</span>
+                    </div>
+                    <!-- <button class="btn-clear" id="clear-chat" title="ล้างแชท">
+                        <i class="fa-solid fa-rotate-right"></i>
+                    </button> -->
+                    <button class="btn-clear" id="logout-btn" title="ออกจากระบบ" style="margin-left: 5px; color: #ff4d4f; border-color: rgba(255,77,79,0.2);">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
+                </div>
+            </header>
+
+            <!-- CHAT AREA -->
+            <main class="chat-area">
+                <div id="chat-container">
+
+                    <!-- Welcome card -->
+                    <div class="welcome-card">
+                        <div class="welcome-icon">💪</div>
+                        <div class="welcome-text">
+                            <h2>สวัสดีครับ! ผม <strong>FitBuddy</strong></h2>
+                            <p>ผู้เชี่ยวชาญด้านสุขภาพและการออกกำลังกาย AI ของคุณ วันนี้จะให้ผมช่วยอะไรได้บ้างครับ?</p>
+                        </div>
+                    </div>
+
+                    <!-- Quick prompts -->
+                    <div class="quick-prompts">
+                        <button class="prompt-chip" data-prompt="ขอท่าออกกำลังกายสำหรับหน้าอก">🏋️ ท่าออกกำลังกายหน้าอก</button>
+                        <button class="prompt-chip" data-prompt="โปรแกรมออกกำลังกายสำหรับมือใหม่">🌱 โปรแกรมสำหรับมือใหม่</button>
+                        <button class="prompt-chip" data-prompt="ท่าออกกำลังกายหน้าท้อง">🔥 ท่าออกกำลังกายหน้าท้อง</button>
+                        <button class="prompt-chip" data-prompt="วิธีอบอุ่นร่างกายก่อนออกกำลังกาย">⚡ วอร์มอัพก่อนออกกำลังกาย</button>
+                        <button class="prompt-chip" data-prompt="คำแนะนำการฟื้นฟูร่างกายหลังออกกำลังกาย">💤 การฟื้นฟูหลังออกกำลังกาย</button>
+                        <button class="prompt-chip" data-prompt="ท่าออกกำลังกายสำหรับลดน้ำหนัก">🏃 ท่าออกกำลังกายลดน้ำหนัก</button>
+                        <button class="prompt-chip" data-prompt="ขอตารางออกกำลังกายแบบ Push Pull Legs หน่อย"> 🕒 จัดตารางการออกกำลังกาย</button>
+                    </div>
+
+                    <div id="typing" class="typing-indicator" style="display:none;">
+                        <div class="typing-bubble">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <span class="typing-text">FitBuddy กำลังคิด...</span>
+                    </div>
+
+                </div>
+            </main>
+
+            <!-- INPUT AREA -->
+            <footer class="input-footer">
+                <div class="input-wrapper">
+                    <form id="chat-form" class="input-form">
+                        <div class="input-box">
+                            <i class="fa-solid fa-magnifying-glass input-icon"></i>
+                            <input
+                                type="text"
+                                id="user-input"
+                                placeholder="ถามเรื่องท่าออกกำลังกาย เช่น 'ขอท่าเล่นหลัง'..."
+                                autocomplete="off"
+                            >
+                            <button type="submit" id="send-btn">
+                                <i class="fa-solid fa-arrow-up"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <p class="input-hint">FitBuddy ตอบโดยอิงข้อมูลจากฐานข้อมูลท่าออกกำลังกายที่ผ่านการตรวจสอบแล้ว</p>
+                </div>
+            </footer>
+
+        </div>
+    </div>
+
+    <div id="rename-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <i class="fa-solid fa-pen-to-square"></i>
+                <h3>เปลี่ยนชื่อแชท</h3>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="rename-input" placeholder="พิมพ์ชื่อแชทใหม่ที่นี่...">
+            </div>
+            <div class="modal-footer">
+                <button id="modal-cancel" class="btn-modal secondary">ยกเลิก</button>
+                <button id="modal-confirm" class="btn-modal primary">บันทึก</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="delete-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header" style="justify-content: center; gap: 10px;">
+                <i class="fa-solid fa-triangle-exclamation" style="color: #ff4d4f;"></i>
+                <h3 style="color: #ff4d4f;">ยืนยันการลบแชท</h3>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center; margin: 10px 0;">คุณแน่ใจหรือไม่ว่าต้องการลบแชทนี้?
+            </div>
+            <div class="modal-footer" style="justify-content: center; gap: 20px;">
+                <button id="delete-modal-cancel" class="btn-modal secondary">ยกเลิก</button>
+                <button id="delete-modal-confirm" class="btn-modal primary" style="background-color: #ff4d4f; border-color: #ff4d4f; color: white;">ลบแชท</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="alert-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <h3>แจ้งเตือน</h3>
+            </div>
+            <div class="modal-body">
+                <p id="alert-message" style="text-align: center; margin: 10px 0;">ข้อความแจ้งเตือน</p>
+            </div>
+            <div class="modal-footer" style="justify-content: center;">
+                <button id="alert-modal-close" class="btn-modal primary">ตกลง</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Quick prompt chips
+        document.querySelectorAll('.prompt-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                document.getElementById('user-input').value = chip.dataset.prompt;
+                document.getElementById('chat-form').dispatchEvent(new Event('submit'));
+            });
+        });
+
+        // Hide quick prompts & welcome card after first message
+        const originalAppend = window.appendMessage;
+
+        // Clear chat
+        document.getElementById('clear-chat').addEventListener('click', () => {
+            const container = document.getElementById('chat-container');
+            const typing = document.getElementById('typing');
+            // remove all messages but keep typing indicator
+            [...container.children].forEach(el => {
+                if (!el.id) container.removeChild(el);
+            });
+        });
+
+        // Mobile sidebar toggle
+        document.getElementById('menu-toggle').addEventListener('click', () => {
+            document.querySelector('.sidebar').classList.toggle('open');
+        });
+    </script>
+</body>
+</html>
