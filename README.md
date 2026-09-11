@@ -1,27 +1,29 @@
-# 🏋️‍♂️ FitBuddy – Full-Stack AI Personal Trainer & Health Assistant
+# 🏋️‍♂️ FitBuddy – ผู้ช่วยเทรนเนอร์ส่วนตัวและที่ปรึกษาด้านสุขภาพด้วย AI
 
-FitBuddy is an end-to-end full-stack AI web application designed to act as a personal fitness trainer and nutrition advisor. It leverages a **Retrieval-Augmented Generation (RAG)** architecture with **Meta-Llama-3-8B-Instruct**, an asynchronous **FastAPI** backend, and a responsive frontend interface. 
+FitBuddy คือเว็บแอปพลิเคชัน Full-Stack ที่พัฒนาขึ้นเพื่อทำหน้าที่เป็นเทรนเนอร์ส่วนตัวและที่ปรึกษาด้านโภชนาการด้วย AI โดยใช้สถาปัตยกรรม **Retrieval-Augmented Generation (RAG)** ร่วมกับโมเดล **Meta-Llama-3-8B-Instruct** ทำงานร่วมกับ backend แบบ asynchronous ด้วย **FastAPI** และ frontend ที่ตอบสนองได้ดีบนทุกอุปกรณ์
 
-The system delivers accurate, domain-specific guidance on workout routines, exercise execution forms, and dietary advice by retrieving vetted information from a curated knowledge base of over 3,200 documents, mitigating common LLM hallucinations.
+ระบบให้คำแนะนำที่แม่นยำและเจาะจงในโดเมนด้านการออกกำลังกาย ท่าทางการเล่นที่ถูกต้อง และคำแนะนำด้านโภชนาการ โดยดึงข้อมูลจากฐานความรู้ที่ผ่านการตรวจสอบแล้วกว่า 3,200 เอกสาร เพื่อลดปัญหาการตอบผิด (hallucination) ที่พบได้ทั่วไปใน LLM
 
----
-
-## 🌟 Key Features
-
-- **Domain-Specific RAG Pipeline**: Powered by LangChain, Hugging Face (`Meta-Llama-3-8B-Instruct`), and FAISS vector similarity search using multilingual embeddings (`sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`).
-- **Strict Guardrails & Prompt Routing**: Tailored system instructions with knowledge routing logic (context retrieval, general fitness knowledge fallback, and strict boundary filtering for out-of-scope/medical queries).
-- **Session & Conversation Memory**: Maintains short-term conversation context to provide coherent multi-turn dialogue while optimizing retrieval query efficiency.
-- **Secure Authentication**: User registration and login utilizing **Bcrypt** password hashing and **JSON Web Tokens (JWT)** for stateless, secure session authorization.
-- **Chat History & Session Management**: Full CRUD capabilities for conversation threads—including custom renaming and session deletion backed by **MongoDB Atlas**.
-- **Real-Time Tunneling**: Seamless integration between local/cloud compute and frontend via **Cloudflare Tunnel**.
+> โปรเจกต์นี้จัดทำขึ้นเพื่อส่งงานในรายวิชา (Academic Project) โดยมีวัตถุประสงค์เพื่อการศึกษาและสาธิตแนวคิดด้าน AI/Full-Stack Development
 
 ---
 
-## 🏗️ System Architecture
+## 🌟 ฟีเจอร์เด่น
 
-```text
-[ User Interface ]
-  HTML5 / CSS3 / Vanilla JS (SPA-style Chat UI)
+- **RAG Pipeline เฉพาะทาง**: ขับเคลื่อนด้วย LangChain, Hugging Face (`Meta-Llama-3-8B-Instruct`) และ FAISS สำหรับค้นหาความคล้ายคลึงของเวกเตอร์ (vector similarity search) โดยใช้ multilingual embeddings (`sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`)
+- **Guardrails และการจัดเส้นทางคำถาม (Prompt Routing)**: มีชุดคำสั่งระบบ (system instructions) พร้อมตรรกะจัดเส้นทางความรู้ ทั้งการดึงข้อมูลจาก context, การใช้ความรู้ทั่วไปสำรอง (fallback) และการกรองคำถามที่อยู่นอกขอบเขตหรือเกี่ยวข้องกับการแพทย์
+- **หน่วยความจำการสนทนา (Session Memory)**: จดจำบริบทการสนทนาระยะสั้น เพื่อให้การตอบโต้หลายรอบ (multi-turn) มีความต่อเนื่อง พร้อมทั้งช่วยลดภาระในการดึงข้อมูลซ้ำซ้อน
+- **ระบบยืนยันตัวตนที่ปลอดภัย**: การสมัครสมาชิกและเข้าสู่ระบบด้วยการเข้ารหัสผ่านแบบ **Bcrypt** และ **JSON Web Tokens (JWT)** สำหรับการยืนยันสิทธิ์แบบ stateless
+- **การจัดการประวัติการสนทนา**: รองรับ CRUD ครบวงจรสำหรับเธรดการสนทนา ทั้งเปลี่ยนชื่อและลบเซสชัน โดยจัดเก็บผ่าน **MongoDB Atlas**
+- **การเชื่อมต่อแบบเรียลไทม์**: เชื่อมต่อระหว่างเครื่องคอมพิวเตอร์/คลาวด์กับ frontend ผ่าน **Cloudflare Tunnel**
+
+---
+
+## 🏗️ สถาปัตยกรรมระบบ
+
+```
+[ ส่วนติดต่อผู้ใช้ ]
+  HTML5 / CSS3 / Vanilla JS (Chat UI แบบ SPA)
          │
          │  HTTP / RESTful API (JSON)
          ▼
@@ -29,112 +31,143 @@ The system delivers accurate, domain-specific guidance on workout routines, exer
          │
          ▼
 [ Backend Service (FastAPI + Uvicorn) ]
-   ├── Authentication & Security (JWT, Bcrypt)
-   ├── Session & History Manager (MongoDB Atlas)
+   ├── ระบบยืนยันตัวตนและความปลอดภัย (JWT, Bcrypt)
+   ├── ตัวจัดการเซสชันและประวัติ (MongoDB Atlas)
    └── RAG Pipeline (LangChain)
-         ├── Query Retriever (FAISS Vector Store)
+         ├── ตัวดึงข้อมูล (FAISS Vector Store)
          │     └── Multilingual Embeddings
-         └── LLM Inference (Meta-Llama-3-8B-Instruct via Hugging Face API)
+         └── การประมวลผลโมเดล (Meta-Llama-3-8B-Instruct ผ่าน Hugging Face API)
 ```
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ เทคโนโลยีที่ใช้
 
 ### **Frontend**
-- **HTML5 & CSS3**: Responsive UI styling, chat layout, and sidebar navigation.
-- **JavaScript (ES6+)**: Asynchronous Fetch API, DOM manipulation, authentication token handling, and local storage state persistence.
 
-### **Backend & APIs**
-- **FastAPI**: High-performance asynchronous REST API framework.
-- **Uvicorn**: ASGI web server implementation.
-- **Pydantic**: Data validation and request/response schema parsing.
-- **PyJWT & Bcrypt**: Token-based authentication and secure credential hashing.
+- **HTML5 & CSS3**: ออกแบบ UI แบบ responsive, chat layout และ sidebar navigation
+- **JavaScript (ES6+)**: การเรียกข้อมูลแบบ asynchronous ด้วย Fetch API, การจัดการ DOM, การจัดการ token สำหรับยืนยันตัวตน และการเก็บสถานะด้วย local storage
+
+### **Backend & API**
+
+- **FastAPI**: เฟรมเวิร์ก REST API แบบ asynchronous ประสิทธิภาพสูง
+- **Uvicorn**: ASGI web server
+- **Pydantic**: ตรวจสอบข้อมูลและจัดการ schema ของ request/response
+- **PyJWT & Bcrypt**: การยืนยันตัวตนด้วย token และการเข้ารหัสข้อมูลรับรอง
 
 ### **AI & Data Engineering**
-- **LangChain**: RAG orchestration, document loaders, text splitters, and runnable chain composition.
-- **FAISS (CPU)**: Vector database for fast semantic document retrieval.
-- **Sentence Transformers**: `paraphrase-multilingual-MiniLM-L12-v2` for cross-language embeddings.
-- **Hugging Face Hub**: Hosted model inference endpoint (`Meta-Llama-3-8B-Instruct`).
-- **Pandas & PyPDF**: Ingestion, pre-processing, and cleaning of structured (CSV) and unstructured (PDF) documents.
 
-### **Database & Infrastructure**
-- **MongoDB Atlas**: Cloud NoSQL database storing user accounts, chat logs, and session metadata.
-- **Cloudflare Tunnel**: Public ingress routing for backend APIs.
+- **LangChain**: จัดการ RAG pipeline, document loaders, text splitters และการประกอบ chain
+- **FAISS (CPU)**: ฐานข้อมูลเวกเตอร์สำหรับค้นหาเอกสารเชิงความหมายอย่างรวดเร็ว
+- **Sentence Transformers**: ใช้โมเดล `paraphrase-multilingual-MiniLM-L12-v2` สำหรับ embeddings ข้ามภาษา
+- **Hugging Face Hub**: จุดเชื่อมต่อสำหรับเรียกใช้โมเดล (`Meta-Llama-3-8B-Instruct`)
+- **Pandas & PyPDF**: นำเข้า ประมวลผลเบื้องต้น และทำความสะอาดข้อมูลทั้งแบบมีโครงสร้าง (CSV) และไม่มีโครงสร้าง (PDF)
+
+### **ฐานข้อมูลและโครงสร้างพื้นฐาน**
+
+- **MongoDB Atlas**: ฐานข้อมูล NoSQL บนคลาวด์ สำหรับเก็บบัญชีผู้ใช้ ประวัติแชท และข้อมูลเซสชัน
+- **Cloudflare Tunnel**: เส้นทางเข้าถึง backend API จากภายนอก
 
 ---
 
-## 📁 Repository Structure
+## 📁 โครงสร้างโปรเจกต์
 
-```text
-fitbuddy-ai-trainer/
+```
+FitBuddy/
+├── Dataset/
+│   └── ...                    # ชุดข้อมูลดิบและเอกสารสำหรับสร้างฐานความรู้ (RAG)
 ├── backend/
-│   ├── FitBuddy_Final.ipynb   # Complete backend notebook (Data processing, RAG, FastAPI)
-│   ├── requirements.txt       # Python package dependencies
-│   └── .env.example           # Environment variables template
+│   ├── FitBuddy_Final.ipynb   # Notebook หลักของ backend (การประมวลผลข้อมูล, RAG, FastAPI)
+│   ├── requirements.txt       # รายการไลบรารีที่ต้องติดตั้ง
+│   └── .env.example           # ตัวอย่างไฟล์ environment variables
 ├── frontend/
-│   ├── index.html             # Main chat application dashboard
-│   ├── login.html             # Authentication (Login / Register) page
-│   ├── style.css              # Application styling
-│   ├── script.js             # Core client-side application logic
-│   └── config.js              # API configuration & endpoint URLs
-├── data/
-│   └── README.md              # Dataset descriptions, sources, and schema documentation
+│   ├── index.html             # หน้าหลักของแอปพลิเคชันแชท
+│   ├── login.html             # หน้ายืนยันตัวตน (เข้าสู่ระบบ / สมัครสมาชิก)
+│   ├── style.css              # การจัดสไตล์ของแอปพลิเคชัน
+│   ├── script.js              # โลจิกหลักฝั่ง client
+│   └── config.js              # การตั้งค่า API และ endpoint URL
 ├── .gitignore
 └── README.md
 ```
 
+> หมายเหตุ: โครงสร้างนี้ปรับให้ตรงกับโฟลเดอร์จริงในรีพอสิทอรี (`Dataset/`, `backend/`, `frontend/`)
+
 ---
 
-## 🚀 Getting Started
+## 🚀 การเริ่มต้นใช้งาน
 
-### Prerequisites
-- Python 3.10+
+### ข้อกำหนดเบื้องต้น
+
+- Python 3.10 ขึ้นไป
 - MongoDB Atlas cluster URI
-- Hugging Face API Token (with access to Llama 3 models)
+- Hugging Face API Token (ที่มีสิทธิ์เข้าถึงโมเดลตระกูล Llama 3)
 
-### 1. Backend Setup
+### 1. การตั้งค่า Backend
 
-1. Navigate to the backend directory:
-   ```bash
-   cd backend
-   ```
+1. เข้าไปยังโฟลเดอร์ backend:
 
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+```
+cd backend
+```
 
-3. Configure environment variables by creating a `.env` file:
-   ```env
-   HF_TOKEN="your_huggingface_api_token"
-   MONGO_URI="your_mongodb_connection_string"
-   SECRET_KEY="your_secure_jwt_secret_key"
-   ```
+2. ติดตั้ง dependencies:
 
-4. Run the backend service (or execute cells in `FitBuddy_Final.ipynb`):
-   ```bash
-   uvicorn main:app --host 0.0.0.0 --port 8000 --reload
-   ```
+```
+pip install -r requirements.txt
+```
 
-### 2. Frontend Setup
+3. สร้างไฟล์ `.env` และกำหนดค่าตัวแปรแวดล้อม:
 
-1. Navigate to `frontend/config.js` and update the base API URL to point to your backend:
-   ```javascript
-   const API_BASE_URL = "http://localhost:8000"; // Or your Cloudflare tunnel domain
-   ```
+```
+HF_TOKEN="your_huggingface_api_token"
+MONGO_URI="your_mongodb_connection_string"
+SECRET_KEY="your_secure_jwt_secret_key"
+```
 
-2. Open `frontend/login.html` or `frontend/index.html` directly in any modern web browser or serve it using Live Server / Nginx / Vercel.
+4. รัน backend service (หรือรันเซลล์ต่าง ๆ ใน `FitBuddy_Final.ipynb`):
 
----
+```
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+```
 
-## 🔒 Security Best Practices
-- Never commit `.env` or sensitive database connection strings to version control.
-- Passwords are salted and hashed using Bcrypt before persistence in MongoDB.
-- API endpoints for user sessions and chat submissions enforce JWT Bearer token validation.
+### 2. การตั้งค่า Frontend
+
+1. เปิดไฟล์ `frontend/config.js` และแก้ไข base API URL ให้ชี้ไปยัง backend ของคุณ:
+
+```
+const API_BASE_URL = "http://localhost:8000"; // หรือโดเมน Cloudflare Tunnel ของคุณ
+```
+
+2. เปิดไฟล์ `frontend/login.html` หรือ `frontend/index.html` ได้โดยตรงผ่านเบราว์เซอร์ หรือรันผ่าน Live Server / Nginx / Vercel
 
 ---
 
-## 👨‍💻 Author & Contributions
-Developed by **Supachai Sungsirin**,**Nattapat Wisitcharoen**,**Ratchawanlop Naopech**
-Computer Science Student | Passionate about Full-Stack Engineering & AI Systems
+## 🔒 แนวปฏิบัติด้านความปลอดภัย
+
+- ห้าม commit ไฟล์ `.env` หรือ connection string ของฐานข้อมูลที่เป็นความลับขึ้น version control โดยเด็ดขาด
+- รหัสผ่านทั้งหมดถูกเข้ารหัสด้วย Bcrypt (พร้อม salt) ก่อนบันทึกลง MongoDB
+- ทุก endpoint ที่เกี่ยวข้องกับเซสชันผู้ใช้และการส่งข้อความแชท ต้องผ่านการตรวจสอบ JWT Bearer token
+
+---
+
+## ⚠️ ข้อจำกัดของโปรเจกต์
+
+โปรเจกต์นี้เป็นผลงานส่งในรายวิชา จึงมีข้อจำกัดบางประการที่ควรทราบก่อนนำไปใช้งานจริง:
+
+- โค้ดฝั่ง backend ปัจจุบันรวมอยู่ใน Jupyter Notebook (`FitBuddy_Final.ipynb`) เพื่อความสะดวกในการสาธิตและทดลอง ยังไม่ได้แยกเป็นโมดูล Python สำหรับ production
+- ยังไม่มีชุดทดสอบอัตโนมัติ (unit test / integration test)
+- เหมาะสำหรับใช้เพื่อการศึกษาและสาธิตแนวคิด ไม่ได้ออกแบบมาเพื่อรองรับผู้ใช้งานจำนวนมากในระดับ production
+
+---
+
+## 👨‍💻 ผู้พัฒนา
+
+โปรเจกต์นี้พัฒนาโดย:
+
+- **Supachai Sungsirin**
+- **Nattapat Wisitcharoen**
+- **Ratchawanlop Naopech**
+
+นักศึกษาสาขาวิทยาการคอมพิวเตอร์
+
+จัดทำขึ้นเพื่อส่งงานในรายวิชา CSI ภาคการศึกษา 2/2568
